@@ -66,7 +66,7 @@ const getTiposEquipo = async (req, res = response) => {
 }
 
 /**
- * crea un tipo de eqipo
+ * crea un tipo de equipo
  */
 const createTipoEquipo = async (req = request, res = response) => {
     const nombre = req.body.nombre.toUpperCase();

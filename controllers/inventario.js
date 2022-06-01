@@ -2,6 +2,9 @@
 const { request, response } = require('express');
 const Inventario = require('../models/inventario');
 const Usuario = require('../models/usuario');
+const Marca = require('../models/marca');
+const Estado = require('../models/estado');
+const TipoEquipo = require('../models/tipoEquipo');
 
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
@@ -23,7 +26,7 @@ const getInventarios = async (req, res = response) => {
 }
 
 /**
- * Consultar todos inventarios
+ * Consultar todos inventarios por ID
  */
  const getInventarioByID = async (req = request, res = response) => {
     try{
@@ -40,7 +43,7 @@ const getInventarios = async (req, res = response) => {
 }
 
 /**
- * crea un inventario
+ * crea un inventario, se valida que existan serial, modelo, usuario, estado y tipoEquipo
  */
  const createInventario = async (req = request, res = response) => {
     try{
@@ -64,8 +67,32 @@ const getInventarios = async (req, res = response) => {
                 msj: 'No existe usuario'
             })
         }
-        // TAREA: Validar que marca, estado y tipo existan y estén activos
+        const marcaBD = await Marca.findOne({
+            _id: marca, estado: true
+        })
+        if(!marcaBD){
+            return res.status(400).json({
+                msj: 'No existe marca'
+            })
+        }
+        const estadoBD = await Estado.findOne({
+            _id: estado, estado: true
+        })
+        if(!estadoBD){
+            return res.status(400).json({
+                msj: 'No existe estado'
+            })
+        }
+        const tipoEquipoBD = await TipoEquipo.findOne({
+            _id: tipoEquipo, estado: true
+        })
+        if(!tipoEquipoBD){
+            return res.status(400).json({
+                msj: 'No existe tipoEquipo'
+        })
+        }
 
+        
         const data = req.body;
 
         const inventario = new Inventario(data);
@@ -80,9 +107,34 @@ const getInventarios = async (req, res = response) => {
 
 const updateInventario = async (req = request, res = response) => {
     try{
+        const { serial, modelo, usuario, marca, estado, tipoEquipo } = req.body;
         const { id } = req.params;
         const data = req.body;// destructuring, spread (...)
     
+        const marcaBD = await Marca.findOne({
+            _id: marca, estado: true
+        })
+        if(!marcaBD){
+            return res.status(400).json({
+                msj: 'No existe marca'
+            })
+        }
+        const estadoBD = await Estado.findOne({
+            _id: estado, estado: true
+        })
+        if(!estadoBD){
+            return res.status(400).json({
+                msj: 'No existe estado'
+            })
+        }
+        const tipoEquipoBD = await TipoEquipo.findOne({
+            _id: tipoEquipo, estado: true
+        })
+        if(!tipoEquipoBD){
+            return res.status(400).json({
+                msj: 'No existe tipoEquipo'
+        })
+        } 
         const inventarioBD = await Inventario.findOne({ _id: id});
        // TODO: VALIDAR QUE EXISTEN Y ESTAN ACTIVOS: ESTADO, USUARIO, MARCA, ...
        if(!inventarioBD){

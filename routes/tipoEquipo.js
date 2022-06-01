@@ -6,7 +6,7 @@ const { getTiposEquipo, getTiposEquipoUserActivo, createTipoEquipo, getTiposEqui
 const router = Router();
 
 /**
- * btiene todos los tipos de equipos los cuales los usuarios
+ * Obtiene todos los tipos de equipos los cuales los usuarios
  * son activos
  */
 router.get('/user-activo', getTiposEquipoUserActivo);

@@ -17,6 +17,10 @@ const Usuario = require('../models/usuario');
     }
 }
 
+/**
+  * Craer usuarios
+ */
+
 const createUsuario = async (req = request, res = response) => {
     try{
         const body = req.body;
